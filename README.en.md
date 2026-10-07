@@ -4,7 +4,7 @@ See the color on a photograph before moving your LUT to the next workflow.
 
 CUBE TO XMP is a local Windows workspace for photography LUTs. Import a `.cube` file or an `.xmp` file containing Adobe RGBTable data, compare its effect on a photo, convert it to the other format, and keep frequently used looks in your own library. Photos and LUTs stay on your device.
 
-[Download for Windows](https://github.com/13489079165/CUBE-to-XMP/releases/latest) · [简体中文](README.md) · [Format details](docs/CONVERSION.md)
+[Download for Windows](https://github.com/OwenWhw/CUBE-to-XMP/releases/latest) · [简体中文](README.md) · [Format details](docs/CONVERSION.md)
 
 ## What you can do
 
@@ -19,7 +19,7 @@ The interface supports Chinese and English, light and dark themes, and optional 
 
 ## Install
 
-1. Open the [latest release](https://github.com/13489079165/CUBE-to-XMP/releases/latest) and download `CUBE-TO-XMP-v2.1.0-windows-x64.zip`.
+1. Open the [latest release](https://github.com/OwenWhw/CUBE-to-XMP/releases/latest) and download `CUBE-TO-XMP-v2.1.0-windows-x64.zip`.
 2. Extract the **entire** folder and run `CUBE-TO-XMP.exe`. Keep the adjacent `_internal` folder with the executable.
 3. Microsoft Edge WebView2 Runtime is required. If it is missing, install it before launching the app.
 

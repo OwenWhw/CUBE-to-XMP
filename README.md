@@ -4,7 +4,7 @@
 
 CUBE TO XMP 是一款在 Windows 本地运行的摄影 LUT 工作台。你可以导入 `.cube` 或带有 RGBTable 的 `.xmp`，在照片上比较调色前后，将 LUT 转换为另一种格式，并把常用风格留在自己的资料库里。照片和 LUT 都在本机处理。
 
-[下载 Windows 免安装版](https://github.com/13489079165/CUBE-to-XMP/releases/latest) · [English](README.en.md) · [转换格式说明](docs/CONVERSION.md)
+[下载 Windows 免安装版](https://github.com/OwenWhw/CUBE-to-XMP/releases/latest) · [English](README.en.md) · [转换格式说明](docs/CONVERSION.md)
 
 ## 你可以做什么
 
@@ -19,7 +19,7 @@ CUBE TO XMP 是一款在 Windows 本地运行的摄影 LUT 工作台。你可以
 
 ## 下载与运行
 
-1. 打开 [最新版本](https://github.com/13489079165/CUBE-to-XMP/releases/latest)，下载 `CUBE-TO-XMP-v2.1.0-windows-x64.zip`。
+1. 打开 [最新版本](https://github.com/OwenWhw/CUBE-to-XMP/releases/latest)，下载 `CUBE-TO-XMP-v2.1.0-windows-x64.zip`。
 2. 解压**整个文件夹**，运行其中的 `CUBE-TO-XMP.exe`。不要单独移动 EXE；同目录的 `_internal` 文件夹是程序运行所需的资源。
 3. 首次启动需要 Windows 上的 Microsoft Edge WebView2 Runtime。如果缺少，请先安装。
 
