@@ -1,10 +1,14 @@
 # CUBE TO XMP
 
-在照片上看见色彩，再把 LUT 带到下一段工作流程。
+**在照片上看见色彩，再把风格带到下一段创作。**
 
-CUBE TO XMP 是一款在 Windows 本地运行的摄影 LUT 工作台。你可以导入 `.cube` 或带有 RGBTable 的 `.xmp`，在照片上比较调色前后，将 LUT 转换为另一种格式，并把常用风格留在自己的资料库里。照片和 LUT 都在本机处理。
+CUBE TO XMP 是面向摄影师和调色爱好者的本地 LUT 工作台。把 `.cube` 或带 Adobe RGBTable 的 `.xmp` 放进资料库，先在真实照片上判断色彩，再转换格式交给下一款软件。导入、预览和转换都在你的电脑上完成。
 
-[下载 Windows 免安装版](https://github.com/OwenWhw/CUBE-to-XMP/releases/latest) · [English](README.en.md) · [转换格式说明](docs/CONVERSION.md)
+[下载最新版](https://github.com/OwenWhw/CUBE-to-XMP/releases/latest) · [各平台与旧版下载](docs/DOWNLOADS.md) · [English](README.en.md)
+
+![CUBE TO XMP 工作台：拖动分隔线对比照片原片与 LUT 效果](docs/images/studio.png)
+
+工作台把照片放在中心，右侧只保留当前 LUT 和导出设置。更换照片后，可以直接用自己的画面判断这份风格是否合适。
 
 ## 你可以做什么
 
@@ -17,13 +21,20 @@ CUBE TO XMP 是一款在 Windows 本地运行的摄影 LUT 工作台。你可以
 
 界面提供简体中文和 English、浅色和深色主题，以及可关闭的动效。应用图标、窗口和资料库预览已统一为黑白灰的摄影工作台风格。
 
+![LUT 资料库：以清晰照片预览不同风格](docs/images/library.png)
+
 ## 下载与运行
 
-1. 打开 [最新版本](https://github.com/OwenWhw/CUBE-to-XMP/releases/latest)，下载 `CUBE-TO-XMP-v2.1.0-windows-x64.zip`。
-2. 解压**整个文件夹**，运行其中的 `CUBE-TO-XMP.exe`。不要单独移动 EXE；同目录的 `_internal` 文件夹是程序运行所需的资源。
-3. 首次启动需要 Windows 上的 Microsoft Edge WebView2 Runtime。如果缺少，请先安装。
+在 [v2.2.0 发布页](https://github.com/OwenWhw/CUBE-to-XMP/releases/tag/v2.2.0) 按系统下载。每个文件都遵循 `CUBE-TO-XMP-v版本-系统-架构.zip` 的命名规则。
 
-这是 Windows 64 位版本，无需单独安装 Python。程序不会把照片或 LUT 上传到服务器。
+| 系统 | 下载文件 | 解压后运行 |
+| --- | --- | --- |
+| Windows x64 | `CUBE-TO-XMP-v2.2.0-windows-x64.zip` | `CUBE-TO-XMP.exe`；保留旁边的 `_internal` 文件夹，需 Edge WebView2 Runtime。 |
+| macOS Apple 芯片 | `CUBE-TO-XMP-v2.2.0-macos-arm64.zip` | `CUBE-TO-XMP.app`。 |
+| macOS Intel | `CUBE-TO-XMP-v2.2.0-macos-x64.zip` | `CUBE-TO-XMP.app`。 |
+| Linux x64 | `CUBE-TO-XMP-v2.2.0-linux-x64.zip` | 解压后运行 `CUBE-TO-XMP/CUBE-TO-XMP`；面向 Ubuntu 24.04 桌面环境构建。 |
+
+解压时请保留完整目录。macOS 包尚未签名或公证，系统可能提示确认来源。各平台包和历史版本见 [下载说明](docs/DOWNLOADS.md)；发布页提供 `SHA256SUMS.txt` 供校验。无需安装 Python，照片和 LUT 不会上传。
 
 ## 三步完成一次转换
 
@@ -33,7 +44,7 @@ CUBE TO XMP 是一款在 Windows 本地运行的摄影 LUT 工作台。你可以
 
 快捷键：`Ctrl+O` 导入 LUT、`Ctrl+P` 更换照片、`Ctrl+S` 导出。聚焦对比照片后，可用方向键、`Home`、`End` 调整分隔线。
 
-导入的 LUT 保存在 `%LOCALAPPDATA%\CUBE TO XMP\Library`；设置保存在同一应用数据目录。删除原始文件后，已导入的副本仍可使用。
+导入的 LUT 会复制到本机资料库；删除原始文件后，已导入的副本仍可使用。Windows 位于 `%LOCALAPPDATA%\CUBE TO XMP\Library`，macOS 位于 `~/Library/Application Support/CUBE TO XMP/Library`，Linux 位于 `~/.local/share/CUBE TO XMP/Library`（遵循 `XDG_DATA_HOME`）。
 
 ## 格式与兼容性
 
@@ -46,7 +57,7 @@ CUBE TO XMP 是一款在 Windows 本地运行的摄影 LUT 工作台。你可以
 
 ## 从源码运行
 
-需要 Windows、Python 3.12 和 Edge WebView2 Runtime：
+需要 Python 3.12，以及对应系统的 WebView 后端。Windows 使用 Edge WebView2；macOS 使用系统 WebKit；Linux 使用 Qt WebEngine。Windows 示例：
 
 ```powershell
 py -3.12 -m venv .venv
@@ -61,6 +72,6 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe tests\smoke_web_ui.py
 ```
 
-打包：先安装 `pyinstaller`，再运行 `.\.venv\Scripts\python.exe build.py`。当前桌面版由 `frontend/` 的 HTML/CSS/JavaScript 和 `web_studio.py` 的本地桥接组成；转换逻辑在 `conversion_service.py`、`lut_core.py`，导入库在 `lut_library.py`。详见 [转换说明](docs/CONVERSION.md) 和 [测试清单](docs/TESTING.md)。
+打包：先安装 `pyinstaller`，再运行 `.\.venv\Scripts\python.exe build.py`。Linux 还需安装 `pywebview[qt]` 和 `PyQt6-WebEngine`。界面位于 `frontend/`，本地桥接位于 `web_studio.py`，转换逻辑位于 `conversion_service.py`、`lut_core.py`。详见 [转换说明](docs/CONVERSION.md) 和 [测试清单](docs/TESTING.md)。
 
-[MIT License](LICENSE) · [v2.1.0 更新内容](docs/RELEASE_v2.1.0.md)
+[MIT License](LICENSE) · [v2.2.0 更新内容](docs/RELEASE_v2.2.0.md)

@@ -1,10 +1,14 @@
 # CUBE TO XMP
 
-See the color on a photograph before moving your LUT to the next workflow.
+**See the look on a photograph. Carry it into your next edit.**
 
-CUBE TO XMP is a local Windows workspace for photography LUTs. Import a `.cube` file or an `.xmp` file containing Adobe RGBTable data, compare its effect on a photo, convert it to the other format, and keep frequently used looks in your own library. Photos and LUTs stay on your device.
+CUBE TO XMP is a local LUT workspace for photographers and color enthusiasts. Keep `.cube` files and `.xmp` files containing Adobe RGBTable data together, judge each look on an actual photograph, and convert it for the next application in your workflow. Importing, previewing, and converting happen on your computer.
 
-[Download for Windows](https://github.com/OwenWhw/CUBE-to-XMP/releases/latest) · [简体中文](README.md) · [Format details](docs/CONVERSION.md)
+[Download the latest release](https://github.com/OwenWhw/CUBE-to-XMP/releases/latest) · [Platforms and previous versions](docs/DOWNLOADS.md) · [简体中文](README.md)
+
+![CUBE TO XMP studio with an original-versus-LUT photo comparison](docs/images/studio.png)
+
+The photograph stays at the center of the studio. The right panel keeps the selected LUT and export settings within reach. Replace the sample photo to judge a look on your own work.
 
 ## What you can do
 
@@ -17,23 +21,30 @@ CUBE TO XMP is a local Windows workspace for photography LUTs. Import a `.cube` 
 
 The interface supports Chinese and English, light and dark themes, and optional motion.
 
-## Install
+![LUT library with large photo previews of different looks](docs/images/library.png)
 
-1. Open the [latest release](https://github.com/OwenWhw/CUBE-to-XMP/releases/latest) and download `CUBE-TO-XMP-v2.1.0-windows-x64.zip`.
-2. Extract the **entire** folder and run `CUBE-TO-XMP.exe`. Keep the adjacent `_internal` folder with the executable.
-3. Microsoft Edge WebView2 Runtime is required. If it is missing, install it before launching the app.
+## Download and run
 
-This is a portable Windows x64 build; Python is not required to run it. The app does not upload photos or LUTs.
+Choose your system on the [v2.2.0 release page](https://github.com/OwenWhw/CUBE-to-XMP/releases/tag/v2.2.0). Package names follow `CUBE-TO-XMP-vMAJOR.MINOR.PATCH-platform-architecture.zip`.
+
+| System | Download | Run after extracting |
+| --- | --- | --- |
+| Windows x64 | `CUBE-TO-XMP-v2.2.0-windows-x64.zip` | `CUBE-TO-XMP.exe`; keep `_internal` beside it. Requires Edge WebView2 Runtime. |
+| macOS Apple silicon | `CUBE-TO-XMP-v2.2.0-macos-arm64.zip` | `CUBE-TO-XMP.app`. |
+| macOS Intel | `CUBE-TO-XMP-v2.2.0-macos-x64.zip` | `CUBE-TO-XMP.app`. |
+| Linux x64 | `CUBE-TO-XMP-v2.2.0-linux-x64.zip` | Run `CUBE-TO-XMP/CUBE-TO-XMP` after extracting. Built for an Ubuntu 24.04 desktop environment. |
+
+Keep the entire extracted folder. The macOS builds are not code-signed or notarized, so macOS may ask you to confirm the source. See [downloads and older releases](docs/DOWNLOADS.md). The release includes `SHA256SUMS.txt` for verification. Python is not required to run the packaged app, and it does not upload your photos or LUTs.
 
 ## Convert a LUT
 
 1. In the studio, select a built-in look or choose **Import LUT**. The right panel shows the input and output formats.
 2. Drag the photo divider to compare the result. Use **Change preview photo** to load your own JPG, PNG, TIFF, or BMP; exporting a LUT never modifies that photo.
-3. Choose an output grid, select **Export XMP** or **Export CUBE**, and save using the Windows file dialog. Your saved file appears in the session history.
+3. Choose an output grid, select **Export XMP** or **Export CUBE**, and save using the system file dialog. Your saved file appears in the session history.
 
 Shortcuts: `Ctrl+O` imports LUTs, `Ctrl+P` changes the photo, and `Ctrl+S` exports. With the comparison focused, use the arrow keys, `Home`, or `End` to move the divider.
 
-Imported files are copied to `%LOCALAPPDATA%\CUBE TO XMP\Library`, so deleting the original does not remove the library copy.
+Imported files are copied into a local library, so deleting the original does not remove the library copy. The library lives at `%LOCALAPPDATA%\CUBE TO XMP\Library` on Windows, `~/Library/Application Support/CUBE TO XMP/Library` on macOS, and `~/.local/share/CUBE TO XMP/Library` on Linux (or under `XDG_DATA_HOME`).
 
 ## Supported formats and limits
 
@@ -46,7 +57,7 @@ The six built-in looks are film-inspired presets; they are not official Fujifilm
 
 ## Run from source
 
-On Windows with Python 3.12 and Edge WebView2 Runtime:
+Use Python 3.12 and the WebView backend for your system: Edge WebView2 on Windows, system WebKit on macOS, or Qt WebEngine on Linux. Windows example:
 
 ```powershell
 py -3.12 -m venv .venv
@@ -61,6 +72,6 @@ Run the automated tests:
 .\.venv\Scripts\python.exe tests\smoke_web_ui.py
 ```
 
-To build a portable executable, install `pyinstaller` and run `.\.venv\Scripts\python.exe build.py`. The UI lives in `frontend/`, the desktop bridge in `web_studio.py`, the conversion service and codec in `conversion_service.py` and `lut_core.py`, and the persistent library in `lut_library.py`.
+To build a portable app, install `pyinstaller` and run `.\.venv\Scripts\python.exe build.py`. Linux also needs `pywebview[qt]` and `PyQt6-WebEngine`. The UI lives in `frontend/`, the desktop bridge in `web_studio.py`, the conversion service and codec in `conversion_service.py` and `lut_core.py`, and the persistent library in `lut_library.py`.
 
-[MIT License](LICENSE) · [v2.1.0 release notes](docs/RELEASE_v2.1.0.md)
+[MIT License](LICENSE) · [v2.2.0 release notes](docs/RELEASE_v2.2.0.md)

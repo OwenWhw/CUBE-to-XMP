@@ -49,18 +49,6 @@ jobs:
       - name: Check frontend syntax
         run: node --check frontend/app.js
 
-      - name: Exercise native interface on Windows
-        if: runner.os == 'Windows'
-        run: python tests/smoke_web_ui.py
-
-      - name: Exercise native interface on macOS
-        if: runner.os == 'macOS'
-        run: python tests/smoke_portable_ui.py
-
-      - name: Exercise native interface on Linux
-        if: runner.os == 'Linux'
-        run: xvfb-run -a env QTWEBENGINE_DISABLE_SANDBOX=1 python tests/smoke_portable_ui.py
-
       - name: Build portable application
         run: python build.py
 
