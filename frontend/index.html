@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CUBE TO XMP</title>
+  <link rel="icon" type="image/png" href="app-icon.png?v=2">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="titlebar">
+      <div class="brand pywebview-drag-region" aria-label="CUBE TO XMP">
+        <img class="app-icon" src="app-icon.png?v=2" alt="" aria-hidden="true">
+        <strong>CUBE TO XMP</strong>
+      </div>
+      <div class="titlebar-spacer pywebview-drag-region"></div>
+      <span class="local-chip"><span class="pulse"></span><span data-i18n="local">本地运行</span></span>
+      <div class="settings-wrap">
+        <button id="settings-toggle" class="settings-toggle" aria-expanded="false" aria-controls="settings-panel" aria-label="设置" title="设置">
+          <span class="tool-icon icon-settings" aria-hidden="true"></span>
+          <span data-i18n="settings">设置</span>
+        </button>
+        <section id="settings-panel" class="settings-panel" aria-label="设置" hidden>
+          <div class="settings-heading"><div><span class="settings-kicker" data-i18n="preferences">偏好设置</span><h2 data-i18n="settingsTitle">让工作台适合你</h2></div><button id="settings-close" class="settings-close" aria-label="关闭设置">×</button></div>
+          <div class="settings-group"><div class="settings-row"><strong data-i18n="language">界面语言</strong><span data-i18n="languageHelp">选择界面文字</span></div><div class="setting-options" data-setting="language"><button data-value="zh" class="active">简体中文</button><button data-value="en">English</button></div></div>
+          <div class="settings-group"><div class="settings-row"><strong data-i18n="appearance">外观</strong><span data-i18n="appearanceHelp">适应不同的编辑环境</span></div><div class="setting-options" data-setting="theme"><button data-value="light" data-i18n="light">浅色</button><button data-value="dark" data-i18n="dark">深色</button></div></div>
+          <div class="settings-group"><div class="settings-row"><strong data-i18n="motion">界面动效</strong><span data-i18n="motionHelp">切换和悬停时的过渡</span></div><div class="setting-options" data-setting="motion"><button data-value="true" data-i18n="on">开启</button><button data-value="false" data-i18n="off">关闭</button></div></div>
+          <div class="settings-divider"></div>
+          <button id="open-library-folder" class="settings-folder"><span><strong data-i18n="libraryLocation">LUT 库位置</strong><small data-i18n="libraryLocationHelp">查看已导入的文件</small></span><span aria-hidden="true">↗</span></button>
+          <p class="settings-foot" data-i18n="settingsFoot">设置保存在本机，重启后仍会生效。</p>
+        </section>
+      </div>
+      <button class="chrome-button" data-window="minimize" aria-label="最小化" data-i18n-aria="minimize">─</button>
+      <button class="chrome-button" data-window="maximize" aria-label="最大化" data-i18n-aria="maximize">□</button>
+      <button class="chrome-button close" data-window="close" aria-label="关闭" data-i18n-aria="close">×</button>
+    </header>
+
+    <div class="body-grid">
+      <aside class="sidebar">
+        <div class="side-top">
+          <p class="side-label" data-i18n="workspace">工作空间</p>
+          <nav aria-label="主导航">
+            <button class="nav-item active" data-view="studio"><span class="tool-icon icon-studio" aria-hidden="true"></span><span data-i18n="studio">工作台</span><span class="nav-shortcut">01</span></button>
+            <button class="nav-item" data-view="library"><span class="tool-icon icon-library" aria-hidden="true"></span><span data-i18n="library">LUT 资料库</span><span id="library-count" class="nav-shortcut">06</span></button>
+            <button class="nav-item" data-view="history"><span class="tool-icon icon-history" aria-hidden="true"></span><span data-i18n="history">转换记录</span><span id="history-count" class="nav-shortcut">00</span></button>
+          </nav>
+        </div>
+        <div class="side-library">
+          <div class="side-title-row"><p class="side-label" data-i18n="recent">最近使用</p></div>
+          <div id="recent-list" class="recent-list"></div>
+        </div>
+        <div class="side-bottom">
+          <button id="import-side" class="import-side"><span class="tool-icon icon-import" aria-hidden="true"></span><span data-i18n="importFile">导入 LUT 文件</span></button>
+          <div class="format-tags"><span>.CUBE</span><span>.XMP</span><span>3D LUT</span></div>
+          <p data-i18n="localPrivacy">文件与照片仅在本机处理</p>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <section id="studio-view" class="view active" aria-label="工作台">
+          <div class="editor-top">
+            <div><p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="studioEyebrow">色彩工作台</span></p><h1 data-i18n="studioTitle">让色彩，回到画面。</h1><p class="editor-sub" data-i18n="studioDescription">载入一份 LUT，在照片中观察差异，然后转换为下一次创作所需的格式。</p></div>
+            <button id="import-hero" class="editor-import"><span class="tool-icon icon-import" aria-hidden="true"></span><span data-i18n="importLut">导入 LUT</span></button>
+          </div>
+          <div class="image-workspace">
+            <div class="workspace-toolbar"><div class="photo-info"><span class="info-dot"></span><strong id="photo-name">内置演示照片</strong><span class="toolbar-separator">/</span><span id="compare-caption">原片 / 预览</span></div><button id="change-photo" class="text-action"><span class="tool-icon icon-photo" aria-hidden="true"></span><span data-i18n="changePhoto">更换预览照片</span></button></div>
+            <div id="compare" class="compare" role="slider" tabindex="0" aria-label="原片和 LUT 效果对比" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+              <img id="original-image" alt="原片" draggable="false">
+              <img id="processed-image" class="processed" alt="应用 LUT 后" draggable="false">
+              <div id="divider" class="divider"><span class="divider-handle">⇄</span></div>
+              <span class="photo-corner-label" aria-hidden="true">CUBE TO XMP <span>·</span> PREVIEW</span>
+            </div>
+            <div class="compare-foot"><span data-i18n="original">← 原片</span><span data-i18n="compareHelp">拖动或使用方向键比较</span><span data-i18n="applied">应用 LUT →</span></div>
+          </div>
+          <div class="film-heading"><div><p class="eyebrow" data-i18n="builtInSix">六款内置风格</p><h2 data-i18n="filmInspiration">胶片灵感</h2></div><button id="open-library" class="link-action"><span data-i18n="viewLibrary">查看完整资料库</span> <span>↗</span></button></div>
+          <div id="film-strip" class="film-strip"></div>
+        </section>
+
+        <section id="library-view" class="view" aria-label="LUT 资料库">
+          <div class="page-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="libraryEyebrow">你的 LUT 资料库</span></p><h1 data-i18n="libraryTitle">收集你的色彩语言。</h1><p data-i18n="libraryDescription">六款内置胶片风格，与自己导入的 LUT 放在同一处。点击即可在照片上预览。</p></div><button id="import-main" class="primary-button">＋ &nbsp;<span data-i18n="importLut">导入 LUT</span></button></div>
+          <div class="library-controls"><input id="library-search" type="search" placeholder="搜索名称、格式…" data-i18n-placeholder="searchPlaceholder" aria-label="搜索 LUT"><div class="segmented" aria-label="筛选"><button data-filter="all" class="active" data-i18n="all">全部</button><button data-filter="builtin" data-i18n="builtIn">内置</button><button data-filter="imported" data-i18n="imported">我的导入</button></div></div>
+          <div id="library-grid" class="library-grid"></div>
+        </section>
+
+        <section id="history-view" class="view" aria-label="转换记录">
+          <div class="page-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="historyEyebrow">本次转换</span></p><h1 data-i18n="historyTitle">每一次转换，都有迹可循。</h1><p data-i18n="historyDescription">这里展示本次运行期间实际写入的文件。</p></div></div>
+          <div id="history-list" class="history-list"></div>
+        </section>
+      </main>
+
+      <aside class="inspector" aria-label="转换设置">
+        <div class="inspector-header"><span class="side-label" data-i18n="currentLut">当前 LUT</span></div>
+        <div id="selected-card" class="selected-card"><div class="empty-orb">◈</div><h3>尚未选择 LUT</h3><p>点击下方预设，或导入自己的文件开始。</p></div>
+        <div class="rule"></div>
+        <div class="convert-head"><p class="side-label" data-i18n="conversion">转换</p></div>
+        <div class="format-flow"><div><small data-i18n="sourceFormat">源格式</small><strong id="source-format">—</strong></div><span class="flow-arrow">→</span><div><small data-i18n="targetFormat">输出格式</small><strong id="target-format">—</strong></div></div>
+        <label class="field-label" for="output-size"><span data-i18n="outputGrid">输出网格</span> <span id="size-hint">选择 LUT 后可设置</span></label>
+        <select id="output-size"><option value="16">16³ · 4,096</option><option value="17">17³ · 4,913</option><option value="25">25³ · 15,625</option><option value="32">32³ · 32,768</option><option value="33">33³ · 35,937</option><option value="64">64³ · 262,144</option><option value="65">65³ · 274,625</option></select>
+        <div id="xmp-options"><label class="field-label" for="group" data-i18n="xmpGroup">XMP 分组</label><input id="group" value="Profiles" maxlength="80"><label class="field-label" for="description"><span data-i18n="description">描述</span> <span data-i18n="optional">可选</span></label><textarea id="description" rows="3" maxlength="300" placeholder="记录这份风格的用途…" data-i18n-placeholder="descriptionPlaceholder"></textarea></div>
+        <div class="inspector-bottom"><button id="export" class="export-button" disabled><span>选择 LUT 后可导出</span><span>↗</span></button><p id="conversion-note">支持 CUBE 与含 RGBTable 的 XMP 相互转换。</p></div>
+      </aside>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

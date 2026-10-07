@@ -1,83 +1,29 @@
-#!/usr/bin/env python3
-"""
-Build script for CUBE-to-XMP v2.0
-Creates a distributable executable using PyInstaller
-"""
-
-import os
-import sys
-import subprocess
-import shutil
+"""Build the WebView2 studio without deleting earlier releases."""
 from pathlib import Path
+import os
+import subprocess
+import sys
 
-
-def clean_build():
-    """Remove previous build artifacts."""
-    print("Cleaning previous builds...")
-    for dir_name in ['build', 'dist']:
-        if os.path.exists(dir_name):
-            shutil.rmtree(dir_name)
-            print(f"  Removed {dir_name}/")
-    for spec_file in Path('.').glob('*.spec'):
-        spec_file.unlink()
-        print(f"  Removed {spec_file}")
-
+ROOT = Path(__file__).resolve().parent
+NAME = "CUBE-TO-XMP"
 
 def build_executable():
-    """Build the executable using PyInstaller."""
-    print("Building executable...")
+    command = [sys.executable, "-m", "PyInstaller", "--noconfirm", "--onedir", "--windowed",
+               "--name", NAME, "--distpath", str(ROOT / "dist"),
+               "--workpath", str(ROOT / "build" / "web-studio"),
+               "--specpath", str(ROOT / "build"), "--icon", str(ROOT / "icon.ico"),
+               "--collect-all", "webview"]
+    for source, destination in [("built_in_luts", "built_in_luts"), ("assets", "assets"),
+                                ("frontend", "frontend"), ("fonts", "fonts"),
+                                ("icon.ico", "."), ("icon.png", ".")]:
+        command.extend(["--add-data", str(ROOT / source) + os.pathsep + destination])
+    command.append(str(ROOT / "cube_to_xmp.py"))
+    subprocess.run(command, cwd=ROOT, check=True)
+    executable = ROOT / "dist" / NAME / (NAME + (".exe" if sys.platform == "win32" else ""))
+    if not executable.exists():
+        raise RuntimeError("Build completed without an executable")
+    print("Built:", executable)
+    return executable
 
-    cmd = [
-        sys.executable, '-m', 'PyInstaller',
-        '--noconfirm',
-        '--onedir',
-        '--windowed',
-        '--name', 'CUBE-to-XMP',
-        '--add-data', f'built_in_luts{os.pathsep}built_in_luts/',
-        '--add-data', f'icon.ico{os.pathsep}.',
-        '--add-data', f'fonts{os.pathsep}fonts/',
-        '--icon', 'icon.ico',
-        '--hidden-import', 'tkinterdnd2',
-        '--hidden-import', 'customtkinter',
-        'cube_to_xmp.py'
-    ]
-
-    try:
-        subprocess.check_call(cmd)
-        return True
-    except subprocess.CalledProcessError as e:
-        print(f"Build failed: {e}")
-        return False
-
-
-def verify_build():
-    """Verify that the build was successful."""
-    exe_path = Path('dist/CUBE-to-XMP/CUBE-to-XMP.exe')
-    if exe_path.exists():
-        size_mb = os.path.getsize(exe_path) / (1024 * 1024)
-        print(f"\nBuild successful!")
-        print(f"Output: {exe_path} ({size_mb:.1f} MB)")
-        return True
-    else:
-        print("Build failed - executable not found")
-        return False
-
-
-def main():
-    print("=" * 60)
-    print("Building CUBE-to-XMP v2.0")
-    print("=" * 60)
-
-    clean_build()
-
-    if not build_executable():
-        sys.exit(1)
-
-    if not verify_build():
-        sys.exit(1)
-
-    print("\nDistributable: dist/CUBE-to-XMP/")
-
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    build_executable()

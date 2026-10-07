@@ -40,3 +40,5 @@ Desktop.ini
 # Environment
 .env
 .env.local
+backups/
+test-output/
