@@ -7,6 +7,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import uuid
+import sys
 
 from conversion_service import ConversionService
 
@@ -18,6 +19,16 @@ FILMS = (
     ("Fuji_Provia_Standard.cube", "Provia", "自然标准"),
     ("Fuji_Velvia_Vivid.cube", "Velvia", "鲜明风景"),
 )
+
+
+def default_library_root():
+    if sys.platform == "win32":
+        base = Path(os.getenv("LOCALAPPDATA", Path.home() / "AppData" / "Local"))
+    elif sys.platform == "darwin":
+        base = Path.home() / "Library" / "Application Support"
+    else:
+        base = Path(os.getenv("XDG_DATA_HOME", Path.home() / ".local" / "share"))
+    return base / "CUBE TO XMP" / "Library"
 
 
 @dataclass(frozen=True)
@@ -40,7 +51,7 @@ class LibraryItem:
 class LutLibrary:
     def __init__(self, bundle_root, data_root=None, service=None):
         self.bundle_root = Path(bundle_root)
-        default_root = Path(os.getenv("LOCALAPPDATA", Path.home())) / "CUBE TO XMP" / "Library"
+        default_root = default_library_root()
         self.data_root = (Path(data_root) if data_root else default_root).resolve()
         self.files = self.data_root / "files"
         self.index_path = self.data_root / "library.json"

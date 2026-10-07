@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
 import tempfile
 from threading import RLock
@@ -17,6 +18,14 @@ from lut_library import LutLibrary
 from window_chrome import color_webview_frame, prepare_webview_open, reveal_webview_window
 
 ROOT = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
+
+
+def open_local_folder(folder):
+    if sys.platform == "win32":
+        os.startfile(str(folder))
+    else:
+        subprocess.Popen(["open" if sys.platform == "darwin" else "xdg-open", str(folder)],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 def image_data(image, maximum=(2560, 1920), quality=93):
@@ -204,12 +213,12 @@ class StudioBridge:
             folder = Path(path).resolve().parent
             if not folder.is_dir():
                 raise ValueError("文件夹不存在。")
-            os.startfile(str(folder))
+            open_local_folder(folder)
             return True
         return self._reply(action)
 
     def open_library_folder(self):
-        return self._reply(lambda: os.startfile(str(self._library.data_root)) or True)
+        return self._reply(lambda: open_local_folder(self._library.data_root) or True)
 
     def window_action(self, command):
         def action():
@@ -231,7 +240,8 @@ def main():
     bridge = StudioBridge()
     window = webview.create_window("CUBE TO XMP", str(ROOT / "frontend" / "index.html"),
              js_api=bridge, width=1440, height=840, min_size=(960, 640),
-             resizable=True, frameless=False, easy_drag=False, shadow=True,
+             resizable=True, frameless=sys.platform != "win32", easy_drag=False,
+             shadow=sys.platform == "win32",
              background_color="#f5f5f2", text_select=True)
     bridge._window = window
     if bridge._settings["motion"]:
@@ -239,7 +249,9 @@ def main():
     # WinForms applies its border style during Show(), so change it afterwards.
     window.events.shown += lambda window: reveal_webview_window(
         window, bridge._settings["motion"], bridge._settings["theme"])
-    webview.start(gui="edgechromium", icon=str(ROOT / "icon.ico"))
+    gui = "edgechromium" if sys.platform == "win32" else "qt" if sys.platform.startswith("linux") else None
+    icon = str(ROOT / ("icon.ico" if sys.platform == "win32" else "icon.png"))
+    webview.start(gui=gui, icon=icon)
 
 
 if __name__ == "__main__":
